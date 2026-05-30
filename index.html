@@ -185,7 +185,7 @@
         .footer-logo span { color: var(--primary); }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; } /* Ocultar links en móvil para limpiar la pantalla */
+            .nav-links { display: none; }
             .hero-text h2 { font-size: 30px; }
             .hero { padding: 40px 15px; min-height: 70vh; }
         }
@@ -221,7 +221,7 @@
                 
                 <div class="input-group">
                     <label for="pin">PIN "Rasca y Gana"</label>
-                    <input type="text" id="pin" placeholder="Ej: FAKE2026" maxlength="12" autocomplete="off">
+                    <input type="text" id="pin" placeholder="Ej: AUDIFONOS26" maxlength="12" autocomplete="off">
                 </div>
                 
                 <button class="btn-primary" onclick="verificarProducto()">Verificar Autenticidad</button>
@@ -231,9 +231,12 @@
                 <i class="fa-solid fa-circle-check icon-large" style="color: var(--success);"></i>
                 <h3 style="color: var(--success);">PRODUCTO ORIGINAL</h3>
                 <p>El candado criptográfico coincide perfectamente. Tu dispositivo es auténtico y tu garantía de fábrica ha sido activada.</p>
-                <div style="margin-top: 20px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                    <p style="font-weight: 700; color: var(--primary);">Dispositivo: Tablet CBnova</p>
-                    <p style="font-size: 12px; color: #a1a1aa;">ID de Registro: #9834-FTC-26</p>
+                
+                <div style="margin-top: 20px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 12px; text-align: left; border-left: 4px solid var(--primary);">
+                    <p style="font-size: 14px; color: var(--primary); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;"><i class="fa-solid fa-headphones"></i> Detalles del Equipo</p>
+                    <p style="font-size: 15px; color: var(--white); margin-bottom: 5px;"><strong>Marca:</strong> SonicTech</p>
+                    <p style="font-size: 15px; color: var(--white); margin-bottom: 5px;"><strong>Modelo:</strong> ANC Pro Wireless Earbuds</p>
+                    <p style="font-size: 15px; color: var(--white);"><strong>No. de Serie:</strong> SNX-9982-FTC-26</p>
                 </div>
             </div>
 
@@ -296,9 +299,8 @@
     </footer>
 
     <script>
-        // --- AQUÍ AGREGAS LOS CÓDIGOS DE TUS TARJETAS FÍSICAS ---
-        // Puedes cambiar 'MIPIN123' por el texto exacto que imprimiste en tus tarjetas rasca y gana.
-        const PINES_VALIDOS = ['CBNOVA2026', 'CBTIS204', 'INNOVA26', 'MIPIN123'];
+        // --- PIN DE PRUEBA CONFIGURADO ---
+        const PINES_VALIDOS = ['AUDIFONOS26'];
 
         function verificarProducto() {
             const pinInput = document.getElementById('pin').value.trim().toUpperCase();
@@ -311,7 +313,6 @@
                 return;
             }
 
-            // Ocultar formulario con un pequeño efecto visual
             form.style.display = 'none'; 
 
             if (PINES_VALIDOS.includes(pinInput)) {
