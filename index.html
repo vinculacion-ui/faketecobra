@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fake Te Cobra | Verificación Oficial</title>
+    <title>Fake Te Cobra | Verificación de Hardware</title>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -20,305 +20,182 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: var(--white); font-family: 'Urbanist', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
         
-        body {
-            background-color: var(--bg); 
-            color: var(--white); 
-            font-family: 'Urbanist', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* --- NAVEGACIÓN --- */
-        header {
-            background: rgba(10, 10, 10, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(222, 255, 154, 0.1);
-        }
-        .logo h1 { font-size: 24px; font-weight: 800; letter-spacing: 1px; }
+        .logo { text-align: center; margin-bottom: 30px; }
+        .logo h1 { font-size: 32px; font-weight: 800; }
         .logo span { color: var(--primary); }
-        .nav-links { display: flex; gap: 20px; font-weight: 600; font-size: 14px; }
-        .nav-links a { color: var(--white); text-decoration: none; transition: 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
-
-        /* --- SECCIÓN HERO (El Validador) --- */
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
-            min-height: 80vh;
-            background: radial-gradient(circle at center, rgba(222, 255, 154, 0.05) 0%, transparent 60%);
-        }
-        
-        .hero-text { text-align: center; margin-bottom: 40px; max-width: 600px; }
-        .hero-text h2 { font-size: 40px; margin-bottom: 10px; line-height: 1.2; }
-        .hero-text p { color: var(--text); font-size: 18px; }
 
         .validation-card {
-            background-color: var(--surface);
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            border: 1px solid rgba(222, 255, 154, 0.2);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            position: relative;
+            background-color: var(--surface); padding: 40px 30px; border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8); border: 1px solid rgba(222, 255, 154, 0.2);
+            width: 100%; max-width: 450px; text-align: center; position: relative;
         }
 
-        /* Indicador NFC */
         .nfc-badge {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: #000;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: #000; padding: 8px 20px; border-radius: 30px;
+            font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;
             box-shadow: 0 5px 15px rgba(222, 255, 154, 0.3);
         }
 
-        /* Formulario */
-        .input-group { margin-bottom: 25px; text-align: left; margin-top: 20px;}
+        /* Tarjeta del Producto Detectado */
+        .product-info {
+            background: rgba(222, 255, 154, 0.05); border: 1px solid rgba(222, 255, 154, 0.2);
+            border-radius: 12px; padding: 20px; margin-top: 20px; margin-bottom: 25px; text-align: left;
+            display: none; /* Se muestra solo si lee el NFC */
+        }
+        .product-info h4 { color: var(--primary); font-size: 14px; text-transform: uppercase; margin-bottom: 5px; }
+        .product-info .brand { font-size: 22px; font-weight: 700; color: var(--white); }
+        .product-info .model { font-size: 16px; color: var(--text); margin-bottom: 10px; }
+        .product-info .serial { font-size: 12px; font-family: monospace; background: #000; padding: 5px 10px; border-radius: 5px; color: var(--white); display: inline-block; }
+
+        /* Estado Genérico (Si entran sin escanear) */
+        .generic-state { margin-top: 20px; margin-bottom: 20px; color: var(--text); display: none; }
+
+        .input-group { margin-bottom: 25px; text-align: left; }
         .input-group label { display: block; font-size: 14px; color: var(--text); margin-bottom: 10px; font-weight: 600; }
         .input-group input {
             width: 100%; padding: 18px; border-radius: 12px; border: 2px solid var(--surface-light); 
             background: var(--bg); color: var(--white); font-size: 20px; font-family: 'Urbanist', sans-serif; 
-            text-transform: uppercase; letter-spacing: 3px; text-align: center; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 3px; text-align: center;
         }
-        .input-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(222, 255, 154, 0.1); }
+        .input-group input:focus { outline: none; border-color: var(--primary); }
         
         button.btn-primary {
             width: 100%; padding: 18px; border-radius: 12px; border: none; background: var(--primary);
-            color: #000; font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 1px;
+            color: #000; font-size: 18px; font-weight: 800; cursor: pointer; text-transform: uppercase;
         }
-        button.btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
         /* Resultados */
-        .result { display: none; margin-top: 20px; padding: 30px 20px; border-radius: 16px; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .result { display: none; margin-top: 20px; padding: 30px 20px; border-radius: 16px; }
         .result.success { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); }
         .result.error { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); }
         .result h3 { font-size: 24px; margin-bottom: 10px; }
         .result p { font-size: 15px; color: var(--white); opacity: 0.9; }
         .icon-large { font-size: 50px; margin-bottom: 15px; }
-
-        /* --- SECCIÓN: CÓMO FUNCIONA --- */
-        .how-it-works {
-            padding: 80px 5%;
-            background: var(--surface);
-            text-align: center;
-        }
-        .section-title { font-size: 32px; margin-bottom: 50px; }
-        .section-title span { color: var(--primary); }
-        
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .step-card {
-            background: var(--bg);
-            padding: 40px 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .step-card i { font-size: 40px; color: var(--primary); margin-bottom: 20px; }
-        .step-card h3 { font-size: 20px; margin-bottom: 10px; }
-        .step-card p { color: var(--text); font-size: 15px; }
-
-        /* --- SECCIÓN: EL PROBLEMA --- */
-        .piracy-info {
-            padding: 80px 5%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 50px;
-            flex-wrap: wrap;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .piracy-text { flex: 1; min-width: 300px; }
-        .piracy-text h2 { font-size: 32px; margin-bottom: 20px; }
-        .piracy-text p { color: var(--text); margin-bottom: 20px; font-size: 18px; }
-        .piracy-stats {
-            flex: 1; min-width: 300px;
-            background: var(--surface);
-            padding: 40px;
-            border-radius: 16px;
-            border-left: 5px solid var(--danger);
-        }
-        .stat-item { margin-bottom: 25px; }
-        .stat-item:last-child { margin-bottom: 0; }
-        .stat-item h4 { font-size: 36px; color: var(--danger); line-height: 1; }
-        .stat-item p { color: var(--white); font-weight: 600; margin-top: 5px; }
-        .stat-item span { color: var(--text); font-size: 14px; font-weight: 400; }
-
-        /* --- FOOTER --- */
-        footer {
-            background: var(--surface);
-            padding: 40px 5%;
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            color: var(--text);
-            font-size: 14px;
-        }
-        .footer-logo { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
-        .footer-logo span { color: var(--primary); }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero-text h2 { font-size: 30px; }
-            .hero { padding: 40px 15px; min-height: 70vh; }
-        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <h1>FAKE <span>TE COBRA</span></h1>
-        </div>
-        <nav class="nav-links">
-            <a href="#inicio">Inicio</a>
-            <a href="#manual">¿Cómo funciona?</a>
-            <a href="#impacto">Protección</a>
-        </nav>
-    </header>
+    <div class="logo">
+        <h1>FAKE <span>TE COBRA</span></h1>
+    </div>
 
-    <section class="hero" id="inicio">
-        <div class="hero-text">
-            <h2>Certificación de <span>Doble Capa</span></h2>
-            <p>Protegiendo tu inversión y garantizando tecnología de calidad.</p>
+    <div class="validation-card">
+        <div class="nfc-badge" id="nfc-badge">
+            <i class="fa-solid fa-spinner fa-spin"></i> Leyendo Hardware...
         </div>
 
-        <div class="validation-card">
-            <div class="nfc-badge">
-                <i class="fa-solid fa-wifi"></i> Hardware NFC Vinculado
+        <div id="validation-form">
+            
+            <div class="product-info" id="product-info">
+                <h4><i class="fa-solid fa-microchip"></i> Hardware Detectado</h4>
+                <div class="brand" id="display-brand">Marca</div>
+                <div class="model" id="display-model">Modelo del producto</div>
+                <div class="serial" id="display-serial">S/N: 0000000</div>
             </div>
 
-            <div id="validation-form">
-                <i class="fa-solid fa-lock" style="font-size: 40px; color: var(--text); margin-top: 15px; margin-bottom: 10px;"></i>
-                <p style="color: var(--text); font-size: 15px; margin-bottom: 10px;">Has completado el paso 1 (Escaneo NFC). Ahora, revela el código oculto en tu empaque.</p>
+            <div class="generic-state" id="generic-state">
+                <i class="fa-solid fa-circle-exclamation" style="font-size: 30px; margin-bottom: 10px;"></i>
+                <p>Acerca tu teléfono al chip NFC del producto para iniciar la validación.</p>
+            </div>
+
+            <div id="pin-section" style="display: none;">
+                <p style="color: var(--text); font-size: 14px; margin-bottom: 15px;">Paso 2: Ingresa el PIN oculto de tu tarjeta "Rasca y Gana".</p>
                 
                 <div class="input-group">
-                    <label for="pin">PIN "Rasca y Gana"</label>
-                    <input type="text" id="pin" placeholder="Ej: AUDIFONOS26" maxlength="12" autocomplete="off">
+                    <label for="pin">PIN DE SEGURIDAD</label>
+                    <input type="text" id="pin" placeholder="EJ: FAKE2026" maxlength="10" autocomplete="off">
                 </div>
                 
-                <button class="btn-primary" onclick="verificarProducto()">Verificar Autenticidad</button>
-            </div>
-
-            <div class="result success" id="result-success">
-                <i class="fa-solid fa-circle-check icon-large" style="color: var(--success);"></i>
-                <h3 style="color: var(--success);">PRODUCTO ORIGINAL</h3>
-                <p>El candado criptográfico coincide perfectamente. Tu dispositivo es auténtico y tu garantía de fábrica ha sido activada.</p>
-                
-                <div style="margin-top: 20px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 12px; text-align: left; border-left: 4px solid var(--primary);">
-                    <p style="font-size: 14px; color: var(--primary); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;"><i class="fa-solid fa-headphones"></i> Detalles del Equipo</p>
-                    <p style="font-size: 15px; color: var(--white); margin-bottom: 5px;"><strong>Marca:</strong> SonicTech</p>
-                    <p style="font-size: 15px; color: var(--white); margin-bottom: 5px;"><strong>Modelo:</strong> ANC Pro Wireless Earbuds</p>
-                    <p style="font-size: 15px; color: var(--white);"><strong>No. de Serie:</strong> SNX-9982-FTC-26</p>
-                </div>
-            </div>
-
-            <div class="result error" id="result-error">
-                <i class="fa-solid fa-triangle-exclamation icon-large" style="color: var(--danger);"></i>
-                <h3 style="color: var(--danger);">ALERTA DE FALSIFICACIÓN</h3>
-                <p>El PIN ingresado no existe en nuestra base de datos criptográfica o ya ha sido registrado previamente por otro usuario.</p>
-                <p style="font-size: 12px; color: #a1a1aa; margin-top: 10px;">No utilices este dispositivo, sus componentes pueden ser inseguros.</p>
-                <button style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--danger); color: white; font-weight: 700; margin-top: 20px; cursor: pointer;" onclick="resetForm()">Intentar de nuevo</button>
+                <button class="btn-primary" onclick="verificarProducto()">Validar Originalidad</button>
             </div>
         </div>
-    </section>
 
-    <section class="how-it-works" id="manual">
-        <h2 class="section-title">Manual de <span>Verificación</span></h2>
-        <div class="steps-grid">
-            <div class="step-card">
-                <i class="fa-solid fa-ticket"></i>
-                <h3>1. Encuentra el PIN</h3>
-                <p>Al abrir tu producto, busca la tarjeta oficial de seguridad y rasca la zona oculta para revelar tu PIN único de 10 dígitos.</p>
-            </div>
-            <div class="step-card">
-                <i class="fa-solid fa-mobile-screen"></i>
-                <h3>2. Escanea el Hardware</h3>
-                <p>Acerca tu smartphone a la carcasa del producto. Nuestro chip NFC invisible abrirá automáticamente este portal de validación.</p>
-            </div>
-            <div class="step-card">
-                <i class="fa-solid fa-shield-halved"></i>
-                <h3>3. Valida y Protege</h3>
-                <p>Ingresa el PIN en la plataforma. Si ambos candados (Físico + Digital) coinciden, tu producto es 100% original.</p>
-            </div>
+        <div class="result success" id="result-success">
+            <i class="fa-solid fa-circle-check icon-large" style="color: var(--success);"></i>
+            <h3 style="color: var(--success);">PRODUCTO ORIGINAL</h3>
+            <p>El candado físico y el digital coinciden perfectamente.</p>
+            <p style="margin-top: 15px; font-weight: bold; color: var(--primary);">Garantía Activada Oficialmente.</p>
         </div>
-    </section>
 
-    <section class="piracy-info" id="impacto">
-        <div class="piracy-text">
-            <h2>Lo barato te puede <span style="color: var(--danger);">salir muy caro.</span></h2>
-            <p>La piratería tecnológica ha evolucionado. Hoy en día, los clones estéticos son tan perfectos que un simple vistazo o un código de barras ya no bastan para protegerte.</p>
-            <p>El verdadero problema no es solo que te engañen, sino el <strong>riesgo físico</strong>. Baterías inestables que pueden sobrecalentarse y componentes internos sin regulación que ponen en peligro tus datos y tu integridad.</p>
+        <div class="result error" id="result-error">
+            <i class="fa-solid fa-triangle-exclamation icon-large" style="color: var(--danger);"></i>
+            <h3 style="color: var(--danger);">ALERTA DE PIRATERÍA</h3>
+            <p>El PIN ingresado no corresponde a este número de serie o ya fue utilizado.</p>
+            <button style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--danger); color: white; font-weight: 700; margin-top: 20px; cursor: pointer;" onclick="resetForm()">Intentar de nuevo</button>
         </div>
-        <div class="piracy-stats">
-            <div class="stat-item">
-                <h4>70%</h4>
-                <p>Probabilidad de falla crítica.</p>
-                <span>En baterías y componentes no regulados.</span>
-            </div>
-            <div class="stat-item">
-                <h4>0%</h4>
-                <p>Valor de reventa.</p>
-                <span>Un equipo falso pierde su valor inmediatamente al salir de su empaque.</span>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-logo">FAKE <span>TE COBRA</span></div>
-        <p>Proyecto de Innovación Tecnológica B2B</p>
-        <p style="margin-top: 15px; font-weight: 700; color: var(--white);">Orgullosamente desarrollado por talento del CBTIS 204</p>
-        <p style="margin-top: 5px;">© 2026 Todos los derechos reservados.</p>
-    </footer>
+    </div>
 
     <script>
-        // --- PIN DE PRUEBA CONFIGURADO ---
-        const PINES_VALIDOS = ['AUDIFONOS26'];
+        // ---------------------------------------------------------
+        // BASE DE DATOS SIMULADA (Ideal para la presentación)
+        // ---------------------------------------------------------
+        const baseDeDatos = {
+            "AUD001": { // Este es el ID que pondremos en el Link del NFC
+                marca: "Sony",
+                modelo: "Audífonos WH-1000XM4",
+                serie: "SN-987654321-X",
+                pinValido: "SONY2026" // El PIN que debes imprimir en tu rasca y gana
+            },
+            "TAB002": {
+                marca: "CBnova",
+                modelo: "Tablet Pro 10.5",
+                serie: "CB-445566-PRO",
+                pinValido: "CBNOVA2026"
+            }
+        };
+
+        // Variables globales
+        let productoDetectado = null;
+
+        // Leer la URL cuando carga la página
+        window.onload = function() {
+            // Obtenemos el ID de la URL (ej. ?id=AUD001)
+            const urlParams = new URLSearchParams(window.location.search);
+            const idNFC = urlParams.get('id');
+
+            const badge = document.getElementById('nfc-badge');
+            
+            if (idNFC && baseDeDatos[idNFC]) {
+                // SI ENCONTRÓ EL PRODUCTO EN LA BASE DE DATOS
+                productoDetectado = baseDeDatos[idNFC];
+                
+                // Actualizar interfaz
+                badge.innerHTML = '<i class="fa-solid fa-wifi"></i> NFC Vinculado';
+                
+                document.getElementById('display-brand').innerText = productoDetectado.marca;
+                document.getElementById('display-model').innerText = productoDetectado.modelo;
+                document.getElementById('display-serial').innerText = "S/N: " + productoDetectado.serie;
+                
+                document.getElementById('product-info').style.display = 'block';
+                document.getElementById('pin-section').style.display = 'block';
+            } else {
+                // SI NO HAY ID EN LA URL O ES INVÁLIDO
+                badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Esperando Escaneo';
+                badge.style.background = '#333';
+                badge.style.color = 'white';
+                
+                document.getElementById('generic-state').style.display = 'block';
+            }
+        };
 
         function verificarProducto() {
             const pinInput = document.getElementById('pin').value.trim().toUpperCase();
-            const form = document.getElementById('validation-form');
-            const successDiv = document.getElementById('result-success');
-            const errorDiv = document.getElementById('result-error');
-
+            
             if (pinInput === '') {
-                alert('Por favor, ingresa el PIN de la tarjeta rasca y gana.');
+                alert('Por favor, ingresa el PIN.');
                 return;
             }
 
-            form.style.display = 'none'; 
+            document.getElementById('validation-form').style.display = 'none';
 
-            if (PINES_VALIDOS.includes(pinInput)) {
-                successDiv.style.display = 'block';
+            // Comparamos el PIN ingresado con el PIN específico de ESTE producto
+            if (productoDetectado && pinInput === productoDetectado.pinValido) {
+                document.getElementById('result-success').style.display = 'block';
             } else {
-                errorDiv.style.display = 'block';
+                document.getElementById('result-error').style.display = 'block';
             }
         }
 
